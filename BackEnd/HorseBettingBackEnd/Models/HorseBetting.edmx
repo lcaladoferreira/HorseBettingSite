@@ -1,0 +1,384 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="HorseBettingSiteModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="horse">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ownerid" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="jockey">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="location">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="owner">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="address" Type="varchar" MaxLength="300" />
+          <Property Name="phone" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="race">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="date" Type="datetime" />
+          <Property Name="locationid" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="racehorse">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="raceid" Type="int" Nullable="false" />
+          <Property Name="horseid" Type="int" Nullable="false" />
+          <Property Name="jockeyid" Type="int" />
+          <Property Name="odd" Type="int" Nullable="false" />
+          <Property Name="position" Type="int" />
+        </EntityType>
+        <Association Name="FK_horse_owner">
+          <End Role="owner" Type="Self.owner" Multiplicity="1" />
+          <End Role="horse" Type="Self.horse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="owner">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="horse">
+              <PropertyRef Name="ownerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_race_location">
+          <End Role="location" Type="Self.location" Multiplicity="1" />
+          <End Role="race" Type="Self.race" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="location">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="race">
+              <PropertyRef Name="locationid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_racehorse_horse">
+          <End Role="horse" Type="Self.horse" Multiplicity="1" />
+          <End Role="racehorse" Type="Self.racehorse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="horse">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="racehorse">
+              <PropertyRef Name="horseid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_racehorse_jockey">
+          <End Role="jockey" Type="Self.jockey" Multiplicity="0..1" />
+          <End Role="racehorse" Type="Self.racehorse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="jockey">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="racehorse">
+              <PropertyRef Name="jockeyid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_racehorse_race">
+          <End Role="race" Type="Self.race" Multiplicity="1" />
+          <End Role="racehorse" Type="Self.racehorse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="race">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="racehorse">
+              <PropertyRef Name="raceid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HorseBettingSiteModelStoreContainer">
+          <EntitySet Name="horse" EntityType="Self.horse" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="jockey" EntityType="Self.jockey" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="location" EntityType="Self.location" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="owner" EntityType="Self.owner" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="race" EntityType="Self.race" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="racehorse" EntityType="Self.racehorse" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_horse_owner" Association="Self.FK_horse_owner">
+            <End Role="owner" EntitySet="owner" />
+            <End Role="horse" EntitySet="horse" />
+          </AssociationSet>
+          <AssociationSet Name="FK_race_location" Association="Self.FK_race_location">
+            <End Role="location" EntitySet="location" />
+            <End Role="race" EntitySet="race" />
+          </AssociationSet>
+          <AssociationSet Name="FK_racehorse_horse" Association="Self.FK_racehorse_horse">
+            <End Role="horse" EntitySet="horse" />
+            <End Role="racehorse" EntitySet="racehorse" />
+          </AssociationSet>
+          <AssociationSet Name="FK_racehorse_jockey" Association="Self.FK_racehorse_jockey">
+            <End Role="jockey" EntitySet="jockey" />
+            <End Role="racehorse" EntitySet="racehorse" />
+          </AssociationSet>
+          <AssociationSet Name="FK_racehorse_race" Association="Self.FK_racehorse_race">
+            <End Role="race" EntitySet="race" />
+            <End Role="racehorse" EntitySet="racehorse" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HorseBettingSiteModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="horse">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ownerid" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="owner" Relationship="Self.FK_horse_owner" FromRole="horse" ToRole="owner" />
+          <NavigationProperty Name="racehorses" Relationship="Self.FK_racehorse_horse" FromRole="horse" ToRole="racehorse" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        </EntityType>
+        <EntityType Name="jockey">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="racehorses" Relationship="Self.FK_racehorse_jockey" FromRole="jockey" ToRole="racehorse" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        </EntityType>
+        <EntityType Name="location">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="races" Relationship="Self.FK_race_location" FromRole="location" ToRole="race" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        </EntityType>
+        <EntityType Name="owner">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="address" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="horses" Relationship="Self.FK_horse_owner" FromRole="owner" ToRole="horse" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        </EntityType>
+        <EntityType Name="race">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date" Type="DateTime" Precision="3" />
+          <Property Name="locationid" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="location" Relationship="Self.FK_race_location" FromRole="race" ToRole="location" />
+          <NavigationProperty Name="racehorses" Relationship="Self.FK_racehorse_race" FromRole="race" ToRole="racehorse" />
+        </EntityType>
+        <EntityType Name="racehorse">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="raceid" Type="Int32" Nullable="false" />
+          <Property Name="horseid" Type="Int32" Nullable="false" />
+          <Property Name="jockeyid" Type="Int32" />
+          <Property Name="odd" Type="Int32" Nullable="false" />
+          <Property Name="position" Type="Int32" />
+          <NavigationProperty Name="horse" Relationship="Self.FK_racehorse_horse" FromRole="racehorse" ToRole="horse" />
+          <NavigationProperty Name="jockey" Relationship="Self.FK_racehorse_jockey" FromRole="racehorse" ToRole="jockey" />
+          <NavigationProperty Name="race" Relationship="Self.FK_racehorse_race" FromRole="racehorse" ToRole="race" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        </EntityType>
+        <Association Name="FK_horse_owner">
+          <End Role="owner" Type="Self.owner" Multiplicity="1" />
+          <End Role="horse" Type="Self.horse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="owner">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="horse">
+              <PropertyRef Name="ownerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_racehorse_horse">
+          <End Role="horse" Type="Self.horse" Multiplicity="1" />
+          <End Role="racehorse" Type="Self.racehorse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="horse">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="racehorse">
+              <PropertyRef Name="horseid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_racehorse_jockey">
+          <End Role="jockey" Type="Self.jockey" Multiplicity="0..1" />
+          <End Role="racehorse" Type="Self.racehorse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="jockey">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="racehorse">
+              <PropertyRef Name="jockeyid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_race_location">
+          <End Role="location" Type="Self.location" Multiplicity="1" />
+          <End Role="race" Type="Self.race" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="location">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="race">
+              <PropertyRef Name="locationid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_racehorse_race">
+          <End Role="race" Type="Self.race" Multiplicity="1" />
+          <End Role="racehorse" Type="Self.racehorse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="race">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="racehorse">
+              <PropertyRef Name="raceid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HorseBettingSiteEntities" annotation:LazyLoadingEnabled="false">
+          <EntitySet Name="horses" EntityType="Self.horse" />
+          <EntitySet Name="jockeys" EntityType="Self.jockey" />
+          <EntitySet Name="locations" EntityType="Self.location" />
+          <EntitySet Name="owners" EntityType="Self.owner" />
+          <EntitySet Name="races" EntityType="Self.race" />
+          <EntitySet Name="racehorses" EntityType="Self.racehorse" />
+          <AssociationSet Name="FK_horse_owner" Association="Self.FK_horse_owner">
+            <End Role="owner" EntitySet="owners" />
+            <End Role="horse" EntitySet="horses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_racehorse_horse" Association="Self.FK_racehorse_horse">
+            <End Role="horse" EntitySet="horses" />
+            <End Role="racehorse" EntitySet="racehorses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_racehorse_jockey" Association="Self.FK_racehorse_jockey">
+            <End Role="jockey" EntitySet="jockeys" />
+            <End Role="racehorse" EntitySet="racehorses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_race_location" Association="Self.FK_race_location">
+            <End Role="location" EntitySet="locations" />
+            <End Role="race" EntitySet="races" />
+          </AssociationSet>
+          <AssociationSet Name="FK_racehorse_race" Association="Self.FK_racehorse_race">
+            <End Role="race" EntitySet="races" />
+            <End Role="racehorse" EntitySet="racehorses" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HorseBettingSiteModelStoreContainer" CdmEntityContainer="HorseBettingSiteEntities">
+          <EntitySetMapping Name="horses">
+            <EntityTypeMapping TypeName="HorseBettingSiteModel.horse">
+              <MappingFragment StoreEntitySet="horse">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="ownerid" ColumnName="ownerid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="jockeys">
+            <EntityTypeMapping TypeName="HorseBettingSiteModel.jockey">
+              <MappingFragment StoreEntitySet="jockey">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="locations">
+            <EntityTypeMapping TypeName="HorseBettingSiteModel.location">
+              <MappingFragment StoreEntitySet="location">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="owners">
+            <EntityTypeMapping TypeName="HorseBettingSiteModel.owner">
+              <MappingFragment StoreEntitySet="owner">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="races">
+            <EntityTypeMapping TypeName="HorseBettingSiteModel.race">
+              <MappingFragment StoreEntitySet="race">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="locationid" ColumnName="locationid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="racehorses">
+            <EntityTypeMapping TypeName="HorseBettingSiteModel.racehorse">
+              <MappingFragment StoreEntitySet="racehorse">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="raceid" ColumnName="raceid" />
+                <ScalarProperty Name="horseid" ColumnName="horseid" />
+                <ScalarProperty Name="jockeyid" ColumnName="jockeyid" />
+                <ScalarProperty Name="odd" ColumnName="odd" />
+                <ScalarProperty Name="position" ColumnName="position" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

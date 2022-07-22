@@ -1,2 +1,2 @@
 # HorseBettingSite
-Created with CodeSandbox
+React FrontEnd + MVC BackEnd site for betting on horses
